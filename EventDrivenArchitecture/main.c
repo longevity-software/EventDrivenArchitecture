@@ -5,11 +5,21 @@
  *  Author: Graham
  */ 
 
+#include "EventQueue.h"
+
 #include <xc.h>
+
+#define EVER ;;
 
 int main(void)
 {
-    while(1)
+	// Initialise the hardware 
+	
+	// and application modules.
+	ETVQ_Init();
+	
+	// loop forever
+    for(EVER)
     {
         //TODO:: Please write your application code 
     }

@@ -183,7 +183,49 @@ void test_EventQueue_X_Y_ZEventsInQueueHighWaterLevelMatches(void)
     // and that the hight water level matches
     const tu8 FINAL_LEVEL = (ADDITION_LEVEL - SUBTRACTION_LEVEL + ADDITION_LEVEL_2);
     TEST_ASSERT_EQUAL(FINAL_LEVEL, EVTQ_GetHighWaterLevel());
+}
 
+//
+//	Tests that if Events have been added, and subsequently removed, 
+//  that the next request for events returns False.
+//
+void test_EventQueue_AllEventsRemovedFromQueueNextReturnsFalse(void)
+{
+    sEvent input;
+
+    input.id = TestEvent;
+
+    int i;
+    eBoolean result = True;
+
+    const tu8 MIN_ADDITION_LEVEL = 3;
+    const tu8 ADDITION_RANGE = (MAX_TEST_QUEUE_SIZE - MIN_ADDITION_LEVEL); 
+    const tu8 ADDITION_LEVEL = (tu8)(MIN_ADDITION_LEVEL + (rand() % ADDITION_RANGE));
+
+    // add the initial range of events
+    for (i = 0; i < ADDITION_LEVEL; ++i)
+    {
+        if (False == EVTQ_PostEvent(input))
+        {
+            result = False;
+        }
+    }
+    
+    // assert that the result is still true
+    TEST_ASSERT_EQUAL(True, result);
+
+    // and that the hight water level matches
+    TEST_ASSERT_EQUAL(ADDITION_LEVEL, EVTQ_GetHighWaterLevel());
+
+    tu8 removedCount = 0;
+
+    // count how many times an event is successfully removed from the queue
+    while (True == EVTQ_GetEvent().eventPresent)
+    {
+        removedCount++;
+    }
+
+    TEST_ASSERT_EQUAL(ADDITION_LEVEL, removedCount);
 }
 
 #endif // TEST

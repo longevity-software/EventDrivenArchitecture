@@ -111,4 +111,79 @@ void test_EventQueue_XEventsInQueueHighWaterLevelMatches(void)
 
 }
 
+//
+//	Tests that if X Events have been added, Y events are removed and then Z events are added, 
+//  that the high water level matches.
+//
+void test_EventQueue_X_Y_ZEventsInQueueHighWaterLevelMatches(void)
+{
+    sEvent input;
+
+    input.id = TestEvent;
+
+    int i;
+    eBoolean result = True;
+
+    const tu8 MIN_ADDITION_LEVEL = 3;
+    const tu8 BUFFER = 3;
+    const tu8 ADDITION_RANGE = (MAX_TEST_QUEUE_SIZE - MIN_ADDITION_LEVEL - BUFFER); 
+    const tu8 ADDITION_LEVEL = (tu8)(MIN_ADDITION_LEVEL + (rand() % ADDITION_RANGE));
+
+    // add the initial range of events
+    for (i = 0; i < ADDITION_LEVEL; ++i)
+    {
+        if (False == EVTQ_PostEvent(input))
+        {
+            result = False;
+        }
+    }
+    
+    // assert that the result is still true
+    TEST_ASSERT_EQUAL(True, result);
+
+    // and that the hight water level matches
+    TEST_ASSERT_EQUAL(ADDITION_LEVEL, EVTQ_GetHighWaterLevel());
+
+    // subtract a few
+    const tu8 MIN_SUBTRACTION_LEVEL = 1;
+    const tu8 SUBTRACTION_RANGE = (ADDITION_LEVEL - MIN_SUBTRACTION_LEVEL);
+    const tu8 SUBTRACTION_LEVEL = (tu8)(MIN_SUBTRACTION_LEVEL + (rand() % SUBTRACTION_RANGE));
+    
+    // add the initial range of events
+    for (i = 0; i < SUBTRACTION_LEVEL; ++i)
+    {
+        if (False == EVTQ_GetEvent().eventPresent)
+        {
+            result = False;
+        }
+    }
+    
+    // assert that the result is still true
+    TEST_ASSERT_EQUAL(True, result);
+
+    // and that the hight water level matches
+    TEST_ASSERT_EQUAL(ADDITION_LEVEL, EVTQ_GetHighWaterLevel());
+
+    // now add a few more to extend the high water level
+    const tu8 MIN_ADDITION_LEVEL_2 = SUBTRACTION_LEVEL; // we need to add at least as many as we subtracted.
+    const tu8 ADDITION_LEVEL_2 = (tu8)(MIN_ADDITION_LEVEL_2 + (rand() % BUFFER));
+    
+    // add the initial range of events
+    for (i = 0; i < ADDITION_LEVEL_2; ++i)
+    {
+        if (False == EVTQ_PostEvent(input))
+        {
+            result = False;
+        }
+    }
+    
+    // assert that the result is still true
+    TEST_ASSERT_EQUAL(True, result);
+
+    // and that the hight water level matches
+    const tu8 FINAL_LEVEL = (ADDITION_LEVEL - SUBTRACTION_LEVEL + ADDITION_LEVEL_2);
+    TEST_ASSERT_EQUAL(FINAL_LEVEL, EVTQ_GetHighWaterLevel());
+
+}
+
 #endif // TEST

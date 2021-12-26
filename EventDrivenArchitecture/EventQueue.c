@@ -10,7 +10,19 @@
 //
 //	Initialises the event queue
 //
-void ETVQ_Init(void)
+void EVTQ_Init(void)
 {
 	
+}
+
+//
+//	Gets the event which is at the top of the queue.
+//
+sEventRequestResult EVTQ_GetEvent(void)
+{
+	sEventRequestResult result;
+	
+	result.eventPresent = True;
+	
+	return result;
 }

@@ -16,7 +16,7 @@ int main(void)
 	// Initialise the hardware 
 	
 	// and application modules.
-	ETVQ_Init();
+	EVTQ_Init();
 	
 	// loop forever
     for(EVER)

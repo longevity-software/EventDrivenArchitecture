@@ -6,15 +6,18 @@
 
 void setUp(void)
 {
+    EVTQ_Init();
 }
 
 void tearDown(void)
 {
 }
 
-void test_EventQueue_NeedToImplement(void)
+void test_EventQueue_NoEventsInQueueNoEventsReturned(void)
 {
-    TEST_IGNORE_MESSAGE("Need to Implement EventQueue");
+    const sEventRequestResult res = EVTQ_GetEvent();
+
+    TEST_ASSERT_EQUAL(False, res.eventPresent);
 }
 
 #endif // TEST

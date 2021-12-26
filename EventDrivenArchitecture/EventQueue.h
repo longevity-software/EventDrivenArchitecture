@@ -11,7 +11,13 @@
 
 #include "GlobalDefinitions.h"
 
-extern void ETVQ_Init(void);
+typedef struct  
+{
+	eBoolean eventPresent;
+}sEventRequestResult;
+
+extern void EVTQ_Init(void);
+extern sEventRequestResult EVTQ_GetEvent(void);
 
 
 

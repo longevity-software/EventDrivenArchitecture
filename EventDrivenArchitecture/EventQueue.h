@@ -11,13 +11,26 @@
 
 #include "GlobalDefinitions.h"
 
+typedef enum _EVENT_ID
+{
+	NoEvent,
+	TestEvent
+}eEventId;
+
+typedef struct _EVENT
+{
+	eEventId id;
+}sEvent;
+
 typedef struct  
 {
 	eBoolean eventPresent;
+	sEvent event;
 }sEventRequestResult;
 
 extern void EVTQ_Init(void);
 extern sEventRequestResult EVTQ_GetEvent(void);
+extern void EVTQ_PostEvent(eEventId id);
 
 
 

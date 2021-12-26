@@ -30,7 +30,8 @@ typedef struct
 
 extern void EVTQ_Init(void);
 extern sEventRequestResult EVTQ_GetEvent(void);
-extern void EVTQ_PostEvent(eEventId id);
+extern eBoolean EVTQ_PostEvent(sEvent event);
+extern tu8 EVTQ_GetHighWaterLevel(void);
 
 
 

@@ -79,6 +79,12 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Button.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Button.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="EventQueue.c">
       <SubType>compile</SubType>
     </Compile>
@@ -86,6 +92,12 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="GlobalDefinitions.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="HardwareGpio.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="HardwareGpio.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="main.c">

@@ -79,6 +79,18 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Atmega644PInterrupt.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Atmega644PInterrupt.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Atmega644PTimer.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Atmega644PTimer.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="Button.c">
       <SubType>compile</SubType>
     </Compile>
@@ -98,6 +110,18 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="HardwareGpio.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="HardwareInterrupt.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="HardwareInterrupt.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="HardwareTimer.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="HardwareTimer.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="main.c">

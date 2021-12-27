@@ -13,9 +13,10 @@
 #include "GlobalDefinitions.h"
 
 //
-//	Public functions
+//	Public types
 //
 typedef enum _GPIO_STATE{Inactive, Active}eGpioState;
+	
 //
 //	Public functions
 //

@@ -7,6 +7,8 @@
 
 #include "EventQueue.h"
 
+#include "HardwareInterrupt.h"
+
 //
 //	Local #defines
 //
@@ -19,11 +21,11 @@
 //
 //	Static variables
 //
-static sEvent evtq_events[MAX_EVENTS];
-static tu8 evtq_event_ip;
+static volatile sEvent evtq_events[MAX_EVENTS];
+static volatile tu8 evtq_event_ip;
 static tu8 evtq_event_op;
-static tu8 evtq_event_count;
-static tu8 evtq_event_highwater;
+static volatile tu8 evtq_event_count;
+static volatile tu8 evtq_event_highwater;
 
 //
 //	Initialises the event queue
@@ -49,12 +51,18 @@ void EVTQ_Init(void)
 //
 sEventRequestResult EVTQ_GetEvent(void)
 {	
+	// event queue can be modified under interrupt, so pause interrupts while checking it.
+	HALI_PauseInterrupts();
+	
 	sEventRequestResult result;		
 	
 	if (0 == evtq_event_count)
 	{
 		result.eventPresent = False;
 		result.event.id = NoEvent;
+	
+		// be sure to resume the paused interrupts
+		HALI_ResumeInterrupts();
 	
 		return result;
 	}
@@ -71,6 +79,9 @@ sEventRequestResult EVTQ_GetEvent(void)
 	// update count for this event
 	evtq_event_count--;
 	
+	// be sure to resume the paused interrupts
+	HALI_ResumeInterrupts();
+	
 	return result;
 }
 
@@ -79,8 +90,14 @@ sEventRequestResult EVTQ_GetEvent(void)
 //
 eBoolean EVTQ_PostEvent(sEvent event)
 {
+	// pause interrupts, as events can be posted under interrupt
+	HALI_PauseInterrupts();
+	
 	if (evtq_event_count == MAX_EVENTS)
 	{
+		// be sure to resume the paused interrupts
+		HALI_ResumeInterrupts();
+		
 		// no space so return false
 		return False;	
 	}
@@ -102,6 +119,9 @@ eBoolean EVTQ_PostEvent(sEvent event)
 		evtq_event_highwater = evtq_event_count;
 	}
 	
+	// be sure to resume the paused interrupts
+	HALI_ResumeInterrupts();
+	
 	return True;
 }
 
@@ -110,5 +130,13 @@ eBoolean EVTQ_PostEvent(sEvent event)
 //
 tu8 EVTQ_GetHighWaterLevel(void)
 {
-	return evtq_event_highwater;
+	// High Water level can be modified under interrupt, so pause interrupts while getting the value
+	HALI_PauseInterrupts();
+	
+	const tu8 LEVEL = evtq_event_highwater;
+	
+	// be sure to resume the paused interrupts
+	HALI_ResumeInterrupts();
+	
+	return LEVEL;
 }

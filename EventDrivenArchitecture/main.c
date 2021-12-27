@@ -6,11 +6,11 @@
  */ 
 
 #include "HardwareGpio.h"
+#include "HardwareTimer.h"
+#include "HardwareInterrupt.h"
 
 #include "EventQueue.h"
 #include "button.h"
-
-#include <xc.h>
 
 #define EVER ;;
 
@@ -18,10 +18,14 @@ int main(void)
 {
 	// Initialise the hardware 
 	HALG_Init();
+	HALT_Init();
 	
 	// and application modules.
 	EVTQ_Init();
 	BTN_Init();
+	
+	// all Initialisation is done, so enable interrupts
+	HALI_EnableInterrupts();
 	
 	// loop forever
     for(EVER)

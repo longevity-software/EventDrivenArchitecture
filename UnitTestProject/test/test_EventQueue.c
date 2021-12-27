@@ -6,6 +6,8 @@
 
 #include "EventQueue.h"
 
+#include "mock_HardwareInterrupt.h"
+
 #define MAX_TEST_QUEUE_SIZE     10
 
 void setUp(void)
@@ -25,6 +27,9 @@ void tearDown(void)
 //
 void test_EventQueue_NoEventsInQueueNoEventsReturned(void)
 {
+    HALI_PauseInterrupts_Expect();
+    HALI_ResumeInterrupts_Expect();
+
     const sEventRequestResult res = EVTQ_GetEvent();
 
     TEST_ASSERT_EQUAL(False, res.eventPresent);
@@ -40,7 +45,13 @@ void test_EventQueue_OneEventInQueueEventIsReturned(void)
 
     input.id = TestEvent;
 
+    HALI_PauseInterrupts_Expect();
+    HALI_ResumeInterrupts_Expect();
+
     eBoolean postResult = EVTQ_PostEvent(input);
+
+    HALI_PauseInterrupts_Expect();
+    HALI_ResumeInterrupts_Expect();
 
     const sEventRequestResult res = EVTQ_GetEvent();
 
@@ -64,6 +75,9 @@ void test_EventQueue_EventQueueFullAddingNextReturnsFalse(void)
 
     for (i = 0; i < MAX_TEST_QUEUE_SIZE; ++i)
     {
+        HALI_PauseInterrupts_Expect();
+        HALI_ResumeInterrupts_Expect();
+
         if (False == EVTQ_PostEvent(input))
         {
             postResult = False;
@@ -72,6 +86,9 @@ void test_EventQueue_EventQueueFullAddingNextReturnsFalse(void)
     
     // assert that the result is still true
     TEST_ASSERT_EQUAL(True, postResult);
+
+    HALI_PauseInterrupts_Expect();
+    HALI_ResumeInterrupts_Expect();
 
     // this next one should fail as queue is full. 
     postResult = EVTQ_PostEvent(input);
@@ -96,7 +113,10 @@ void test_EventQueue_XEventsInQueueHighWaterLevelMatches(void)
     const tu8 TEST_LEVEL = (tu8)(MIN_TEST_LEVEL + (rand() % TEST_LEVEL_RANGE));
 
     for (i = 0; i < TEST_LEVEL; ++i)
-    {
+    {            
+        HALI_PauseInterrupts_Expect();
+        HALI_ResumeInterrupts_Expect();
+
         if (False == EVTQ_PostEvent(input))
         {
             postResult = False;
@@ -105,6 +125,9 @@ void test_EventQueue_XEventsInQueueHighWaterLevelMatches(void)
     
     // assert that the result is still true
     TEST_ASSERT_EQUAL(True, postResult);
+
+    HALI_PauseInterrupts_Expect();
+    HALI_ResumeInterrupts_Expect();
 
     // and that the hight water level matches
     TEST_ASSERT_EQUAL(TEST_LEVEL, EVTQ_GetHighWaterLevel());
@@ -131,7 +154,10 @@ void test_EventQueue_X_Y_ZEventsInQueueHighWaterLevelMatches(void)
 
     // add the initial range of events
     for (i = 0; i < ADDITION_LEVEL; ++i)
-    {
+    {        
+        HALI_PauseInterrupts_Expect();
+        HALI_ResumeInterrupts_Expect();
+
         if (False == EVTQ_PostEvent(input))
         {
             result = False;
@@ -140,6 +166,9 @@ void test_EventQueue_X_Y_ZEventsInQueueHighWaterLevelMatches(void)
     
     // assert that the result is still true
     TEST_ASSERT_EQUAL(True, result);
+
+    HALI_PauseInterrupts_Expect();
+    HALI_ResumeInterrupts_Expect();
 
     // and that the hight water level matches
     TEST_ASSERT_EQUAL(ADDITION_LEVEL, EVTQ_GetHighWaterLevel());
@@ -152,6 +181,9 @@ void test_EventQueue_X_Y_ZEventsInQueueHighWaterLevelMatches(void)
     // add the initial range of events
     for (i = 0; i < SUBTRACTION_LEVEL; ++i)
     {
+        HALI_PauseInterrupts_Expect();
+        HALI_ResumeInterrupts_Expect();
+
         if (False == EVTQ_GetEvent().eventPresent)
         {
             result = False;
@@ -160,6 +192,9 @@ void test_EventQueue_X_Y_ZEventsInQueueHighWaterLevelMatches(void)
     
     // assert that the result is still true
     TEST_ASSERT_EQUAL(True, result);
+
+    HALI_PauseInterrupts_Expect();
+    HALI_ResumeInterrupts_Expect();
 
     // and that the hight water level matches
     TEST_ASSERT_EQUAL(ADDITION_LEVEL, EVTQ_GetHighWaterLevel());
@@ -171,6 +206,9 @@ void test_EventQueue_X_Y_ZEventsInQueueHighWaterLevelMatches(void)
     // add the initial range of events
     for (i = 0; i < ADDITION_LEVEL_2; ++i)
     {
+        HALI_PauseInterrupts_Expect();
+        HALI_ResumeInterrupts_Expect();
+
         if (False == EVTQ_PostEvent(input))
         {
             result = False;
@@ -182,6 +220,10 @@ void test_EventQueue_X_Y_ZEventsInQueueHighWaterLevelMatches(void)
 
     // and that the hight water level matches
     const tu8 FINAL_LEVEL = (ADDITION_LEVEL - SUBTRACTION_LEVEL + ADDITION_LEVEL_2);
+    
+    HALI_PauseInterrupts_Expect();
+    HALI_ResumeInterrupts_Expect();
+
     TEST_ASSERT_EQUAL(FINAL_LEVEL, EVTQ_GetHighWaterLevel());
 }
 
@@ -205,6 +247,9 @@ void test_EventQueue_AllEventsRemovedFromQueueNextReturnsFalse(void)
     // add the initial range of events
     for (i = 0; i < ADDITION_LEVEL; ++i)
     {
+        HALI_PauseInterrupts_Expect();
+        HALI_ResumeInterrupts_Expect();
+
         if (False == EVTQ_PostEvent(input))
         {
             result = False;
@@ -214,15 +259,24 @@ void test_EventQueue_AllEventsRemovedFromQueueNextReturnsFalse(void)
     // assert that the result is still true
     TEST_ASSERT_EQUAL(True, result);
 
+    HALI_PauseInterrupts_Expect();
+    HALI_ResumeInterrupts_Expect();
+
     // and that the hight water level matches
     TEST_ASSERT_EQUAL(ADDITION_LEVEL, EVTQ_GetHighWaterLevel());
 
     tu8 removedCount = 0;
 
+    HALI_PauseInterrupts_Expect();
+    HALI_ResumeInterrupts_Expect();
+
     // count how many times an event is successfully removed from the queue
     while (True == EVTQ_GetEvent().eventPresent)
     {
         removedCount++;
+        
+        HALI_PauseInterrupts_Expect();
+        HALI_ResumeInterrupts_Expect();
     }
 
     TEST_ASSERT_EQUAL(ADDITION_LEVEL, removedCount);

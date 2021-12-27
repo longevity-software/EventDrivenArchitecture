@@ -102,7 +102,7 @@ void test_Button_ButtonOnePressedEventPostedAfter50MilliSecondsWithReleaseMidDeb
     test_Button_ButtonOnePressedEventPostedAfter50MilliSeconds();    
 }
 
-/*void test_Button_ButtonOneReleasedEventPostedAfter50MilliSecondsWithPressMidDebounce(void)
+void test_Button_ButtonOneReleasedEventPostedAfter50MilliSecondsWithPressMidDebounce(void)
 {    
     // call the button one pressed test to simulate the button being pressed.
     test_Button_ButtonOnePressedEventPostedAfter50MilliSeconds();
@@ -128,8 +128,22 @@ void test_Button_ButtonOnePressedEventPostedAfter50MilliSecondsWithReleaseMidDeb
 
     BTN_EventProcessor(event);
 
-    // call the normal button debounce test to confirm that it is 50mS following this active state
-    test_Button_ButtonOneReleasedEventPostedAfter50MilliSeconds();    
-}*/
+    // Now confirm that it takes MAX_DEBOUNCE_COUNT times to raise the Button Released event
+    for (i = 0; i < (MAX_DEBOUNCE_COUNT - 1); ++i)
+    { 
+        HALG_GetButtonOneState_ExpectAndReturn(Inactive);
+
+        BTN_EventProcessor(event);
+    }
+
+    sEvent expectedEvent;
+    expectedEvent.id = ButtonReleasedEvent;
+
+    // one more, should post the event
+    HALG_GetButtonOneState_ExpectAndReturn(Inactive);
+    EVTQ_PostEvent_ExpectAndReturn(expectedEvent, True);
+
+    BTN_EventProcessor(event);  
+}
 
 #endif // TEST

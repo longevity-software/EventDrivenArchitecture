@@ -2,9 +2,13 @@
 
 ## Overview
 This project is a simple(ish) application to explore the features and functionality of an event driven architecture for use in an embedded microcontroller.
+The software will flash an LED for 200mS every second while a button is pressed, there is also unfinshed functionality for:
+- Detecting timer overflows.
+- Detecting incorrect configuration of the GPIO pins.
 
 ## Microcontroller
 The hardware intended to be used with this project is the Atmega644P Microcontroller, clocked from an 8MHz oscillator.
+**Note** this software has yet to be tested on real hardware.
 
 ## Architecture overview
 The application is split into three distinct sections:

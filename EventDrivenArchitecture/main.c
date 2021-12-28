@@ -36,6 +36,7 @@ int main(void)
 		{
 			// event is present, so propogate it to all event processors.	
 			BTN_EventProcessor(EVENT.event);
+			HALT_EventProcessor(EVENT.event);
 		}
     }
 }

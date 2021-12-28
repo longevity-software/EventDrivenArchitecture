@@ -6,13 +6,22 @@
  */ 
 
 #include "HardwareGpio.h"
+#include "Atmega644PGpio.h"
+
+//
+//	Local definitions
+//
+#define LED_PIN			1
+#define BUTTON_PIN		2
 
 //
 //	Initialises the GPIOs 
 //
 void HALG_Init(void)
 {
-	
+	// Set the appropriate pin directions
+	ATM644PG_SetPinAsOutput(LED_PIN);
+	ATM644PG_SetPinAsInput(BUTTON_PIN);	
 }
 
 //
@@ -20,5 +29,8 @@ void HALG_Init(void)
 //
 eGpioState HALG_GetButtonOneState(void)
 {
-	return Inactive;
+	eGetPinLevelStruct pinState = ATM644PG_GetPinLevel(BUTTON_PIN);
+	
+	// button 1 is active low
+	return (pinState.level == LOW) ? Active : Inactive;
 }

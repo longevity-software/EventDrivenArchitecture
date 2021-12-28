@@ -11,6 +11,7 @@
 
 #include "EventQueue.h"
 #include "button.h"
+#include "Indicators.h"
 
 #define EVER ;;
 
@@ -23,6 +24,7 @@ int main(void)
 	// and application modules.
 	EVTQ_Init();
 	BTN_Init();
+	INDC_Init();
 	
 	// all Initialisation is done, so enable interrupts
 	HALI_EnableInterrupts();
@@ -34,8 +36,9 @@ int main(void)
 		
 		if (True == EVENT.eventPresent)
 		{
-			// event is present, so propogate it to all event processors.	
+			// event is present, so propagate it to all event processors.	
 			BTN_EventProcessor(EVENT.event);
+			INDC_EventProcessor(EVENT.event);
 			HALT_EventProcessor(EVENT.event);
 		}
     }

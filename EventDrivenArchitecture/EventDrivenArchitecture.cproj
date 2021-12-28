@@ -143,6 +143,12 @@
     <Compile Include="HardwareTimer.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="Indicators.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Indicators.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="main.c">
       <SubType>compile</SubType>
     </Compile>

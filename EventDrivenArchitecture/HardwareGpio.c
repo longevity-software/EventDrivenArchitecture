@@ -34,3 +34,14 @@ eGpioState HALG_GetButtonOneState(void)
 	// button 1 is active low
 	return (pinState.level == LOW) ? Active : Inactive;
 }
+
+//
+//	Sets the state of the LED
+//
+void HALG_SetLedOneState(eGpioState state)
+{
+	// LED is active Low
+	const ePinLevel level = (Active == state) ? LOW : HIGH;
+	
+	ATM644PG_SetPinLevel(LED_PIN, level);
+}

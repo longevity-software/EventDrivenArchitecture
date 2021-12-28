@@ -22,5 +22,6 @@ typedef enum _GPIO_STATE{Inactive, Active}eGpioState;
 //
 extern void HALG_Init(void);
 extern eGpioState HALG_GetButtonOneState(void);
+extern void HALG_SetLedOneState(eGpioState state);
 
 #endif /* HARDWAREGPIO_H_ */
